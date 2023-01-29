@@ -77,7 +77,7 @@ def plot_traj_2d(before, after, filename="test2d.png", axis_idx=[0, 1], show=Fal
     plt.grid()
     plt.legend()
     plt.axis("equal")
-    plt.title(filename[:-4].replace("_", " ").title())
+    # plt.title(filename[:-4].replace("_", " ").title())
     plt.tight_layout()
     plt.savefig(os.path.join(FIGURE_PATH, filename))
     if show:
@@ -102,7 +102,7 @@ def plot_traj_3d(before, after, filename="test3d.png", show=False):
 
     plt.grid()
     plt.legend()
-    plt.title(filename[:-4].replace("_", " ").title())
+    # plt.title(filename[:-4].replace("_", " ").title())
     plt.tight_layout()
     plt.savefig(os.path.join(FIGURE_PATH, filename))
     if show:
