@@ -154,12 +154,12 @@ To tune a Gauss-Newton optimizer
         \label{fig:2d_batch}
 \end{figure}
 
-Figure \ref{fig:2d_batch} shows the 2D pose SLAM result by the batch solution. It worth noting that the Gauss-Newton solver fell into a local minimum without perturbation and the optimization results are even worse than the initial trajectory.
+Figure \ref{fig:2d_batch} shows the 2D pose SLAM result by the batch solution. It worth noting that the Gauss-Newton solver fell into a local minimum without perturbation and the optimization results are even worse than the initial trajectory. 
+The initial error is $2.575\times 10^6$ and the final error is $1.547\times 10^9$\footnote{The error is computed by the unnormalized error $0.5\Sigma_i(h_i(X_i)-z)^2/\sigma^2$ between a nonlinear factor graph and a trajectory of value nodes.}.
 
 \item \textbf{Incremental Solution:}
 
 To solve a 2D pose SLAM problem incrementally, a modified version of the provided algorithm is proposed in Algorithm \ref{alg:incremental_2d}.
-% TODO add error statistics
 
 \begin{algorithm}[H]
     \caption{incremental\_solution (poses, edges)}\label{alg:incremental_2d}
@@ -215,10 +215,9 @@ To tune a iSAM2 solver
 \end{figure}
 
 Figure \ref{fig:solve_pose_slam_2d_incremental} shows the 2D pose SLAM result by the incremental solution.
-% TODO add error statistics
+The initial error is $2.575\times 10^6$ and the final error is $1.319\times 10^6$.
 
 \end{enumerate}
-
 
 
 
@@ -253,8 +252,8 @@ To tune a Gauss-Newton optimizer
 \end{figure}
 
 Figure \ref{fig:solve_pose_slam_3d_batch} shows the 3D pose SLAM result by the batch solution. 
-Two side views in X-Y plane and Y-Z plane of trajectories are plotted in Figure \ref{fig:solve_pose_slam_3d_batch_view}.
-% TODO add error statistics
+Two side views in X-Y plane and Y-Z plane of trajectories are plotted in Figure \ref{fig:solve_pose_slam_3d_batch_view}. 
+The initial error is $8.364\times 10^3$ and the final error is $0.634$.
 
 \begin{figure}[H]
     \centering
@@ -293,7 +292,7 @@ To tune a iSAM2 solver
 
 Figure \ref{fig:solve_pose_slam_3d_incremental} shows the 3D pose SLAM result by the incremental solution. 
 Two side views in X-Y plane and Y-Z plane of trajectories are plotted in Figure \ref{fig:solve_pose_slam_3d_incremental_view}.
-% TODO add error statistics
+The initial error is $8.364\times 10^3$ and the final error is $0.756$.
 
 \begin{figure}[H]
     \centering
