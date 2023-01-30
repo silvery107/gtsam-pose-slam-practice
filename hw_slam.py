@@ -10,7 +10,7 @@ FIGURE_PATH = "figures/"
 DTYPE = np.float64
 
 
-def load_g2o(filename):
+def load_g2o(filename:str)->dict:
     """
     Load a G2O file. 
     Each VERTEX will be stored in "poses" ndarray and each EDGE will be stored in "edges" ndarray.
@@ -36,7 +36,7 @@ def load_g2o(filename):
     
     return data
 
-def construct_info_mat(info_v):
+def construct_info_mat(info_v:list)->np.ndarray:
     """
     Construct a information matrix from a list of its upper triangular entries.
     Only 2D and 3D spaces are supported.
@@ -63,7 +63,7 @@ def construct_info_mat(info_v):
     info_m = info_m + info_m.T - np.diag(info_m.diagonal())
     return info_m
 
-def plot_traj_2d(before, after, filename="test2d.png", axis_idx=[0, 1], show=False):
+def plot_traj_2d(before:np.ndarray, after:np.ndarray, filename="test2d.png", axis_idx=[0, 1], show=False):
     """
     Plot a 2D figure of trajectories before and after optimization.
     """
@@ -83,7 +83,7 @@ def plot_traj_2d(before, after, filename="test2d.png", axis_idx=[0, 1], show=Fal
     if show:
         plt.show()
 
-def plot_traj_3d(before, after, filename="test3d.png", show=False):
+def plot_traj_3d(before:np.ndarray, after:np.ndarray, filename="test3d.png", show=False):
     """
     Plot a 3D figure of trajectories before and after optimization.
     """
@@ -108,10 +108,12 @@ def plot_traj_3d(before, after, filename="test3d.png", show=False):
     if show:
         plt.show()
 
-def solve_pose_slam_2d_batch(data, data_name, figure_name):
+def solve_pose_slam_2d_batch(data_name:str, figure_name:str):
     """
     Use the Gauss-Newton solver to solve a 2D pose graph SLAM in a batch.
     """
+    data = load_g2o(data_name)
+
     is3D = False
     graph, initial = gtsam.readG2o(os.path.join(DATA_PATH, data_name), is3D)
 
@@ -142,10 +144,12 @@ def solve_pose_slam_2d_batch(data, data_name, figure_name):
     
     plot_traj_2d(initialPoses[:, 1:3], resultPoses[:, :2], figure_name)
 
-def solve_pose_slam_2d_incremental(data, figure_name):
+def solve_pose_slam_2d_incremental(data_name:str, figure_name:str):
     """
     Use the incremental Smoothing and Mapping method to solve a 2D pose graph SLAM.
     """
+    data = load_g2o(data_name)
+
     # Create iSAM2 parameters which can adjust the threshold necessary to force relinearization and how many
     # update calls are required to perform the relinearization.
     params = gtsam.ISAM2Params()
@@ -193,15 +197,23 @@ def solve_pose_slam_2d_incremental(data, figure_name):
         isam.update(graph, initial_estimate)
         result = isam.calculateEstimate()
 
+    is3D = False
+    graph_batch, initial = gtsam.readG2o(os.path.join(DATA_PATH, data_name), is3D)
+    print("Optimization complete")
+    print("initial error = ", graph_batch.error(initial))
+    print("final error = ", graph_batch.error(result))
+
     resultPoses = gtsam.utilities.extractPose2(result)
     initialPoses = data["poses"]
 
     plot_traj_2d(initialPoses[:, 1:3], resultPoses[:, :2], figure_name)
 
-def solve_pose_slam_3d_batch(data, data_name, figure_name):
+def solve_pose_slam_3d_batch(data_name:str, figure_name:str):
     """
     Use the Gauss-Newton solver to solve a 3D pose graph SLAM in a batch.
     """
+    data = load_g2o(data_name)
+
     is3D = True
     graph, initial = gtsam.readG2o(os.path.join(DATA_PATH, data_name), is3D)
 
@@ -236,10 +248,12 @@ def solve_pose_slam_3d_batch(data, data_name, figure_name):
     plot_traj_2d(initialPoses[:, 1:3], resultPoses[:, -3:-1], figure_name[:-4]+"_x_y.png")
     plot_traj_2d(initialPoses[:, 2:4], resultPoses[:, -2:], figure_name[:-4]+"_y_z.png", [1, 2])
 
-def solve_pose_slam_3d_incremental(data, figure_name):
+def solve_pose_slam_3d_incremental(data_name:str, figure_name:str):
     """
     Use the incremental Smoothing and Mapping method to solve a 3D pose graph SLAM.
     """
+    data = load_g2o(data_name)
+
     # Create iSAM2 parameters which can adjust the threshold necessary to force relinearization and how many
     # update calls are required to perform the relinearization.
     params = gtsam.ISAM2Params()
@@ -290,6 +304,12 @@ def solve_pose_slam_3d_incremental(data, figure_name):
         # Perform incremental update to iSAM2's internal Bayes tree, optimizing only the affected variables.
         isam.update(graph, initial_estimate)
         result = isam.calculateEstimate()
+    
+    is3D = True
+    graph_batch, initial = gtsam.readG2o(os.path.join(DATA_PATH, data_name), is3D)
+    print("Optimization complete")
+    print("initial error = ", graph_batch.error(initial))
+    print("final error = ", graph_batch.error(result))
 
     resultPoses = gtsam.utilities.extractPose3(result)
     initialPoses = data["poses"]
@@ -304,13 +324,11 @@ if __name__ == "__main__":
     garage_3d = "parking-garage.g2o"
 
     # Problem 1
-    data2d = load_g2o(intel_2d)
-    solve_pose_slam_2d_batch(data2d, intel_2d, "solve_pose_slam_2d_batch.png")
-    solve_pose_slam_2d_incremental(data2d, "solve_pose_slam_2d_incremental.png")
+    solve_pose_slam_2d_batch(intel_2d, "solve_pose_slam_2d_batch.png")
+    solve_pose_slam_2d_incremental(intel_2d, "solve_pose_slam_2d_incremental.png")
     
-    # Problem 2
-    data3d = load_g2o(garage_3d)
-    solve_pose_slam_3d_batch(data3d, garage_3d, "solve_pose_slam_3d_batch.png")
-    solve_pose_slam_3d_incremental(data3d, "solve_pose_slam_3d_incremental.png")
+    # # Problem 2
+    solve_pose_slam_3d_batch(garage_3d, "solve_pose_slam_3d_batch.png")
+    solve_pose_slam_3d_incremental(garage_3d, "solve_pose_slam_3d_incremental.png")
 
     # All optimized trajectory figures are saved under FIGURE_PATH
