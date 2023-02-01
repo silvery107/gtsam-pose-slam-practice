@@ -27,5 +27,6 @@ python hw_slam.py # All optimized trajectory figures are saved under figures/
 <img src="figures/solve_pose_slam_3d_batch_x_y.png" width="400">
 
 ## Dependencies
-- Python 3.8 or above
+- Python >= 3.8
+- GTSAM >= 4.0
 - See [requirements.txt](requirements.txt)
