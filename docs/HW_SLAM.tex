@@ -44,6 +44,7 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{algorithm}
+\usepackage[bottom]{footmisc}
 
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
@@ -155,11 +156,11 @@ To tune a Gauss-Newton optimizer
 \end{figure}
 
 Figure \ref{fig:2d_batch} shows the 2D pose SLAM result by the batch solution. It worth noting that the Gauss-Newton solver fell into a local minimum without perturbation and the optimization results are even worse than the initial trajectory. 
-The initial error is $2.575\times 10^6$ and the final error is $1.547\times 10^9$\footnote{The error is computed by the unnormalized error $0.5\Sigma_i(h_i(X_i)-z)^2/\sigma^2$ between a nonlinear factor graph and a trajectory of value nodes.}.
+The initial error\footnote{The error is computed by the unnormalized error $0.5\Sigma_i(h_i(X_i)-z)^2/\sigma^2$ between a nonlinear factor graph and a trajectory of value nodes.} is $2.575\times 10^6$ and the final error is $1.547\times 10^9$.
 
 \item \textbf{Incremental Solution:}
 
-To solve a 2D pose SLAM problem incrementally, a modified version of the provided algorithm is proposed in Algorithm \ref{alg:incremental_2d}.
+To solve a 2D pose SLAM problem incrementally, a slightly modified version of the provided algorithm is proposed in Algorithm \ref{alg:incremental_2d}.
 
 \begin{algorithm}[H]
     \caption{incremental\_solution (poses, edges)}\label{alg:incremental_2d}
