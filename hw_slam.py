@@ -168,10 +168,10 @@ def solve_pose_slam_2d_incremental(data_name:str, figure_name:str):
 
     # Initialize the current estimate which is used during the incremental inference loop.
     result = None
+    # Create a Nonlinear factor graph as well as the data structure to hold state estimates.
+    graph = gtsam.NonlinearFactorGraph()
+    initial_estimate = gtsam.Values()
     for pose in tqdm(poses, desc="Processing"):
-        # Create a Nonlinear factor graph as well as the data structure to hold state estimates.
-        graph = gtsam.NonlinearFactorGraph()
-        initial_estimate = gtsam.Values()
         
         id_p = int(pose[0])
         if id_p == 0:
@@ -196,6 +196,8 @@ def solve_pose_slam_2d_incremental(data_name:str, figure_name:str):
         # Perform incremental update to iSAM2's internal Bayes tree, optimizing only the affected variables.
         isam.update(graph, initial_estimate)
         result = isam.calculateEstimate()
+        graph.resize(0)
+        initial_estimate.clear()
 
     is3D = False
     graph_batch, initial = gtsam.readG2o(os.path.join(DATA_PATH, data_name), is3D)
@@ -272,11 +274,10 @@ def solve_pose_slam_3d_incremental(data_name:str, figure_name:str):
 
     # Initialize the current estimate which is used during the incremental inference loop.
     result = None
+    # Create a Nonlinear factor graph as well as the data structure to hold state estimates.
+    graph = gtsam.NonlinearFactorGraph()
+    initial_estimate = gtsam.Values()
     for pose in tqdm(poses, desc="Processing"):
-        # Create a Nonlinear factor graph as well as the data structure to hold state estimates.
-        graph = gtsam.NonlinearFactorGraph()
-        initial_estimate = gtsam.Values()
-
         id_p = int(pose[0])
         if id_p == 0:
             id_p, x, y, z, *quat_v = pose
@@ -304,6 +305,8 @@ def solve_pose_slam_3d_incremental(data_name:str, figure_name:str):
         # Perform incremental update to iSAM2's internal Bayes tree, optimizing only the affected variables.
         isam.update(graph, initial_estimate)
         result = isam.calculateEstimate()
+        graph.resize(0)
+        initial_estimate.clear()
     
     is3D = True
     graph_batch, initial = gtsam.readG2o(os.path.join(DATA_PATH, data_name), is3D)
