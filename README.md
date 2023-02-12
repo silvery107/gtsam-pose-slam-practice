@@ -28,5 +28,5 @@ python hw_slam.py # All optimized trajectory figures are saved under figures/
 
 ## Dependencies
 - Python >= 3.8
-- GTSAM >= 4.0
+- [GTSAM](https://gtsam.org/) >= 4.0
 - See [requirements.txt](requirements.txt)
