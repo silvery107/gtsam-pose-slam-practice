@@ -156,7 +156,7 @@ def solve_pose_slam_2d_incremental(data_name:str, figure_name:str):
     # Only relinearize variables whose linear delta magnitude is greater than this threshold
     params.setRelinearizeThreshold(0.1)
     # Only relinearize any variables every relinearizeSkip calls to ISAM2::update
-    params.relinearizeSkip = 10
+    params.setRelinearizeSkip(10)
     isam = gtsam.ISAM2(params)
 
     # Define the prior factor to the factor graph
@@ -262,7 +262,7 @@ def solve_pose_slam_3d_incremental(data_name:str, figure_name:str):
     # Only relinearize variables whose linear delta magnitude is greater than this threshold
     params.setRelinearizeThreshold(0.1)
     # Only relinearize any variables every relinearizeSkip calls to ISAM2::update
-    params.relinearizeSkip = 10
+    params.setRelinearizeSkip(10)
     isam = gtsam.ISAM2(params)
 
     # Define the prior factor to the factor graph
