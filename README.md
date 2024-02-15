@@ -1,5 +1,5 @@
 # GTSAM Pose SLAM Practice
-This repo is a small pratice and example to solve the pose graph SLAM problem using the GTSAM library on INTEL and Garage dataset provied by [Dr. Luca Carlone](https://lucacarlone.mit.edu/datasets/). In cases below, both batch (Gauss-Newton) and incremental (iSAM) solutions are presented.
+This repo is a small practice and example to solve the pose graph SLAM problem using the GTSAM library on INTEL and Garage dataset provided by [Dr. Luca Carlone](https://lucacarlone.mit.edu/datasets/). In cases below, both batch (Gauss-Newton) and incremental (iSAM) solutions are presented.
 
 A detailed report can be found [here](docs/HW_SLAM.pdf).
 
